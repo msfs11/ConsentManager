@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Component>
+
+
+Person_Ext(user, "Company users", "Customers")
+Person(admin, "Admin", "Company administrator", $sprite="person2")
+
+System_Boundary(company, "Company System") {
+    System(system, "Company system", "Company core system, provides also CMS functions")
+
+    System_Boundary(consent_manager, "ConsentManager", "A microservice for managing user consents") {
+        Component(consent_api, "API", "API for managing user consents", "FastAPI")
+        Component(consent_logic, "Logic", "Logic for managing user consents")
+        Component(consent_storage, "Storage", "Storage for user consents")
+    }
+    SystemDb(db, "ConsentManager DB", "Holds consent items, versions and signed consents")
+    
+    Rel(system, consent_api, "Uses")
+    Rel_D(consent_storage, db, "Reads/Writes", "TCP/SQL")
+    Rel(admin, system, "Uses")
+    Rel(user, system, "Uses")
+}
+@enduml

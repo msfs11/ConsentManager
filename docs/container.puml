@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Container>
+
+LAYOUT_LANDSCAPE()
+
+title
+<b>ConsentManager microservice C4 container diagram</b>
+<i>Describes how the microservice can be used in the existing system landscape</i>
+end title
+
+
+Person(admin, "Admin", "Company administrator", $sprite="person2")
+Person_Ext(user, "Company users", "Customers")
+
+System_Ext(ext, "Website/desktop app/mobile apps", "Company systems for customers")
+
+
+
+System_Boundary(message_processing_system, "Company system") {
+    Container(api_gateway, "API gateway", "", "The main interface that the customer interacts with")
+    Container(system, "Company system", "", "Handles all business logic")
+    Container(consent, "ConsentManager", "Manages consents", "Python, FastAPI")
+    Container(int_notification, "Notifications service", "", "Manages changes")
+    ContainerDb(consent_db, "Database", "PostgreSQL", "Holds consent items, versions and signed consents", $sprite="msql_server")
+
+    Rel(api_gateway, consent, "Uses", "HTTP/REST API")
+    Rel_U(api_gateway, system, "Uses")
+    Rel_U(system, int_notification, "Uses")
+    Rel(system, consent, "Uses", "HTTP/REST API")
+    Rel(admin, system, "Manages consents", "HTTP/REST API")
+    Rel(consent, consent_db, "Reads/writes", "TCP/SQL")
+}
+
+Rel_U(ext, api_gateway, "Uses", "HTTPS/REST API")
+Rel(user, ext, "Uses company resources")
+
+SHOW_LEGEND()
+
+@enduml
