@@ -1,4 +1,4 @@
-@startuml
+@startuml sequence
 actor User as user
 
 participant "API Gateway" as api
