@@ -1,0 +1,39 @@
+@startuml
+
+entity "User" as user {
+  + UserID : int
+  --
+  Name : varchar
+  Email : varchar
+}
+
+entity "Consent" as consent {
+  + ConsentID : int
+  --
+  ConsentType : varchar
+  ConsentStatus : varchar
+  UserID : int
+}
+
+entity "ConsentHistory" as history {
+  + HistoryID : int
+  --
+  ConsentID : int
+  ChangeDate : datetime
+  OldStatus : varchar
+  NewStatus : varchar
+}
+
+entity "ChangeTracker" as tracker {
+  + ChangeID : int
+  --
+  HistoryID : int
+  ChangeDate : datetime
+  ChangeType : varchar
+}
+
+user ||..o{ consent : Gives
+consent ||..o{ history : Has
+history ||..o{ tracker : Tracks
+
+@enduml
