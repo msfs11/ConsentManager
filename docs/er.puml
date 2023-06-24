@@ -1,14 +1,14 @@
 @startuml
 
 entity "User" as user {
-  + UserID : int
+  + UserID : uuid
   --
   Name : varchar
   Email : varchar
 }
 
 entity "Consent" as consent {
-  + ConsentID : int
+  + ConsentID : uuid
   --
   ConsentType : varchar
   ConsentStatus : varchar
@@ -16,7 +16,7 @@ entity "Consent" as consent {
 }
 
 entity "ConsentHistory" as history {
-  + HistoryID : int
+  + HistoryID : uuid
   --
   ConsentID : int
   ChangeDate : datetime
@@ -25,7 +25,7 @@ entity "ConsentHistory" as history {
 }
 
 entity "ChangeTracker" as tracker {
-  + ChangeID : int
+  + ChangeID : uuid
   --
   HistoryID : int
   ChangeDate : datetime
