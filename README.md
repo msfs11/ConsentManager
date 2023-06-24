@@ -20,17 +20,31 @@ Increased brand value and customer loyalty: With consent management at the core 
 # Constraints
 
 # Diagrams
-## Context
 ## Container
+![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/component.puml)
+
 ## Component 
+![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/container.puml)
+
 ## ER diagrams
+
+![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/er.puml)
+
+
 ## Use case diagram
+![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/usecase.puml)
+
 ## Sequence diagrams
+![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/sequence.puml)
+
 ## Deployment diagram
+![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/deployment.puml)
 
 # Data processing algorithms
 
 ## Functionality description and basic scenarios
+
+
 # Functional requirements
 # Non-functional requirements
 ## Localizability
