@@ -1,4 +1,4 @@
-@startuml
+@startuml ER diagram
 
 entity "User" as user {
   + UserID : uuid
