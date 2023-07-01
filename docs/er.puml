@@ -1,21 +1,33 @@
 @startuml ER diagram
 
-entity "User" as user {
-  + UserID : uuid
-  --
-  Name : varchar
-  Email : varchar
-}
-
 entity "Consent" as consent {
-  + ConsentID : uuid
+  + id : uuid
   --
-  ConsentType : varchar
-  ConsentStatus : varchar
-  UserID : int
+  TypeId : uuid
+  CategoryId : uuid
+  ConsentStatus : uuid
+  Content : text
 }
 
-entity "ConsentHistory" as history {
+entity "Status" as status {
+  + id : uuid
+  --
+  Title : varchar
+}
+
+entity "Type" as type {
+  + id : uuid
+  --
+  Title : varchar
+}
+
+entity "Category" as category {
+  + id : uuid
+  --
+  Title : varchar
+}
+
+entity "History" as history {
   + HistoryID : uuid
   --
   ConsentID : int
@@ -34,6 +46,9 @@ entity "ChangeTracker" as tracker {
 
 user ||..o{ consent : Gives
 consent ||..o{ history : Has
+consent ||..o{ type : Has
+consent ||..o{ category : Has
+consent ||..o{ status : Has
 history ||..o{ tracker : Tracks
 
 @enduml

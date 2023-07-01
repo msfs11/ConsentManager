@@ -1,22 +1,31 @@
-# app/db.py
+"""
+Database operations
+"""
 
 import databases
 import ormar
 import sqlalchemy
 
-from .config import settings
+from .settings import settings
 
 database = databases.Database(settings.DATABASE_URI)
 metadata = sqlalchemy.MetaData()
 
-
 class BaseMeta(ormar.ModelMeta):
+    """
+    User operations
+    """
     metadata = metadata
     database = database
 
-
 class User(ormar.Model):
+    """
+    User operations
+    """
     class Meta(BaseMeta):
+        """
+        Meta operations
+        """
         tablename = "users"
 
     id: int = ormar.Integer(primary_key=True)

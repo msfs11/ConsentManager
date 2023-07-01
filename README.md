@@ -8,7 +8,6 @@ ConsentManager is a microservice that manages user consents. It provides an API 
 - Avoidance of regulatory fines: Consent management helps companies avoid regulatory fines by ensuring that they collect and process data only with the appropriate consent.
 Increased brand value and customer loyalty: With consent management at the core of the marketing strategy, companies can increase brand value and boost customer loyalty.
 - Trust and transparency: Consent management helps companies build trust and transparency with their customers by being transparent about how their data will be used and who will have access to it.
-- Compliance with privacy regulations: Consent management helps companies comply with privacy regulations such as GDPR, CCPA, and others, which require companies to obtain explicit consent from users before collecting and processing their personal data.
 
 # Glossary
 Consent: The agreement or permission expressed through affirmative, voluntary words or actions that are mutually understandable to all parties involved, to engage in a specific act at a specific time.
@@ -17,6 +16,7 @@ GDPR: General Data Protection Regulation, a regulation in EU law on data protect
 CCPA: California Consumer Privacy Act, a privacy law in California that enhances privacy rights and consumer protection for residents of California, United States.
 Data privacy: The protection of personal information or data from unauthorized access, use, disclosure, or destruction.
 Audit trail: A record of all the activities related to a particular operation or process, used to track and monitor the actions of users and systems.
+
 # Scope and Limitations
 Admin management functionalities, including user roles and permissions, user authentication, and access control, are not within the scope of this microservice. The microservice primarily focuses on providing consent management functionality for users and secure API routes for administering consents using public key encryption.
 
@@ -38,7 +38,7 @@ Basic scenarios:
 Onboarding: During the onboarding process, new users can sign a policy agreement and give their consent for data collection and processing. ConsentManager stores the consent data in the database and enforces the consent policies.
 Policy updates: When a company updates its policy, existing users can be notified and asked to review and update their consent preferences. ConsentManager updates the consent data in the database and enforces the updated consent policies.
 Admin management: ConsentManager provides ability for monitoring received consents and data-subject requests. ConsentManager stores the consent data in the database and enforces the consent policies.
-
+Consent and data sharing management: Consent Manager provides APIs for building consent pages and integrating them with an authorization platform. This flow enables businesses to give their customers the option to share their data with third-party providers in open finance ecosystems
 ## Sequence diagrams
 ![Sequence diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/sequence.puml)
 
