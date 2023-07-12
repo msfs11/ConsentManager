@@ -1,10 +1,10 @@
 @startuml ER diagram
 
 entity "Consent" as consent {
-  + id : uuid
+  + uuid : uuid
   --
   TypeId : uuid
-  CategoryId : uuid
+  FlowId : uuid
   ConsentStatus : uuid
   Content : text
 }
@@ -21,7 +21,7 @@ entity "Type" as type {
   Title : varchar
 }
 
-entity "Category" as category {
+entity "Flow" as flow {
   + id : uuid
   --
   Title : varchar
@@ -44,10 +44,18 @@ entity "ChangeTracker" as tracker {
   ChangeType : varchar
 }
 
-user ||..o{ consent : Gives
+entity "SignedConsents" as signed {
+  + uuid : uuid // user id from the external system
+  --
+  ConsentID : uuid
+  SignDate : datetime
+  SignType : varchar [sign/revoke]
+}
+
+signed::ConsentID ||..o{ consent::uuid : n:n
 consent ||..o{ history : Has
 consent ||..o{ type : Has
-consent ||..o{ category : Has
+consent::FlowId ||..o{ flow::uuid : Has
 consent ||..o{ status : Has
 history ||..o{ tracker : Tracks
 

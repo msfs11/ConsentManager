@@ -1,8 +1,10 @@
 # Intro
 ConsentManager is a microservice that manages user consents. It provides an API for managing user consents, stores and retrieves consent data in a database, and enforces consent policies. ConsentManager is designed to comply with privacy regulations such as GDPR, CCPA, and others, which require companies to obtain explicit consent from users before collecting and processing their personal data. ConsentManager can be used for a variety of use cases, including onboarding, policy updates, compliance with privacy regulations, consent tracking, user data management, admin management, avoidance of regulatory fines, and increased brand value and customer loyalty.
+
 ## For users:
 - Control over their personal data: Consent management gives users control over their personal data by allowing them to choose what data they want to share with a company and how it can be used.
 - Transparency: Consent management ensures that users are informed about how their data will be used and who will have access to it.
+
 ## For companies:
 - Compliance with privacy regulations: Consent management helps companies comply with privacy regulations such as GDPR, CCPA, and others, which require companies to obtain explicit consent from users before collecting and processing their personal data.
 - Avoidance of regulatory fines: Consent management helps companies avoid regulatory fines by ensuring that they collect and process data only with the appropriate consent.
@@ -10,35 +12,108 @@ Increased brand value and customer loyalty: With consent management at the core 
 - Trust and transparency: Consent management helps companies build trust and transparency with their customers by being transparent about how their data will be used and who will have access to it.
 
 # Glossary
-Consent: The agreement or permission expressed through affirmative, voluntary words or actions that are mutually understandable to all parties involved, to engage in a specific act at a specific time.
-Consent management: The process of systematically informing users about how a business collects and uses private data, and giving users the opportunity to provide (or deny) consent to this usage.
-GDPR: General Data Protection Regulation, a regulation in EU law on data protection and privacy for all individuals within the European Union (EU) and the European Economic Area (EEA).
-CCPA: California Consumer Privacy Act, a privacy law in California that enhances privacy rights and consumer protection for residents of California, United States.
-Data privacy: The protection of personal information or data from unauthorized access, use, disclosure, or destruction.
-Audit trail: A record of all the activities related to a particular operation or process, used to track and monitor the actions of users and systems.
+- Consent: The agreement or permission expressed through affirmative, voluntary words or actions that are mutually understandable to all parties involved, to engage in a specific act at a specific time.
+- Consent management: The process of systematically informing users about how a business collects and uses private data, and giving users the opportunity to provide (or deny) consent to this usage.
+- GDPR: General Data Protection Regulation, a regulation in EU law on data protection and privacy for all individuals within the European Union (EU) and the European Economic Area (EEA).
+- CCPA: California Consumer Privacy Act, a privacy law in California that enhances privacy rights and consumer protection for residents of California, United States.
+- Data privacy: The protection of personal information or data from unauthorized access, use, disclosure, or destruction.
+- Audit trail: A record of all the activities related to a particular operation or process, used to track and monitor the actions of users and systems.
+- Personally Identifiable Information (PII): Any information that can be used to identify the PII Principal to whom the information relates to.
+- PII Principal: The natural person to whom the personally identifiable information (PII) relates to.
+- Purpose: The business, operational or regulatory requirement for the collection, use and/or disclosure of a PII Principal's data. In other words, it is the reason personal information is collected by the entity.
+- Consent Receipt: A record of a consent interaction (or consent record summary linked to the record of consent) provided by a PII Principal to a PII Controller to collect, use and disclose the PII Principal’s PII in accordance to an agreed set of terms.
+- PII Controller: A private stakeholder that determines the purposes and means for processing personally identifiable information (PII) other than the natural persons who use data for personal purposes.
+
 
 # Scope and Limitations
-Admin management functionalities, including user roles and permissions, user authentication, and access control, are not within the scope of this microservice. The microservice primarily focuses on providing consent management functionality for users and secure API routes for administering consents using public key encryption.
+Data storage:
+the service doesn't store any personal data, it stores only uuid of the users from the exteral systems, which signed specific consents.
+
+Administration functions, including user roles and permissions, user authentication, and access control, are not in the scope of this microservice. The microservice primarily focuses on providing consent management functionality for users and secure API routes for administering consents using public key encryption.
 
 According to the twelve-factor methodology, the service is not providing any logging and metrics capabilities.
 
+
 # Diagrams
 ## Container diagram
-![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/component.puml)
+![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/container.puml)
 
 ## Component 
-![Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/container.puml)
+![Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/component.puml)
 
 ## ER diagram
 ![ER diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/er.puml)
 
 ## Use cases
 ![Use cases diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/usecase.puml)
-Basic scenarios:
-Onboarding: During the onboarding process, new users can sign a policy agreement and give their consent for data collection and processing. ConsentManager stores the consent data in the database and enforces the consent policies.
+
+### Onboarding
+During the onboarding process, new users can sign a policy agreement and give their consent for data collection and processing. ConsentManager stores the consent data in the database and enforces the consent policies.
+
+```
+// Retrievs all consents with latest versions with specified category
+GET /consents/?category=onboarding
+```
+
+User with defined in the path {uuid} sign some consents, which defined in the request body 
+```
+POST /users/{uuid}/consents
+Request body - list of UUID of consents
+{
+  "uuids": [
+    "123e4567-e89b-12d3-a456-426655440000",
+    "223e4567-e89b-12d3-a456-426655440000",
+    "323e4567-e89b-12d3-a456-426655440000"
+  ]
+}
+```
+
+### Registered users
+Retrieve signed consents for user by {uuid}
+```
+GET /users/{uuid}/consents
+```
+
+### Revoke consent
+
+
+### Administration
+According to CRUD operations.
+
+Administration allowed only by the provding Auth-token in headers.
+
+**Create new consent**
+```
+POST /consents 
+```
+
+**Retrieve consent**
+```
+GET /consents/{uuid}
+```
+
+**Update consent**
+
+```
+PUT /consents/{uuid}
+```
+
+**Mark consent as not active**
+```
+PATCH /consents/{uuid}
+Request body:
+{
+  Active: true/false
+}
+```
+
 Policy updates: When a company updates its policy, existing users can be notified and asked to review and update their consent preferences. ConsentManager updates the consent data in the database and enforces the updated consent policies.
 Admin management: ConsentManager provides ability for monitoring received consents and data-subject requests. ConsentManager stores the consent data in the database and enforces the consent policies.
+
+
 Consent and data sharing management: Consent Manager provides APIs for building consent pages and integrating them with an authorization platform. This flow enables businesses to give their customers the option to share their data with third-party providers in open finance ecosystems
+
+
 ## Sequence diagrams
 ![Sequence diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/sequence.puml)
 
@@ -56,12 +131,34 @@ Regulatory Compliance Reporting: ConsentManager should generate reports and prov
 Integration Capabilities: ConsentManager should be able to integrate with other systems and applications within the organization's technology landscape, such as customer relationship management (CRM) systems or data analytics platforms.
 
 # Non-functional requirements
+## Legal cleaness
+GDPR is a European Union law enacted on 25 May 2018 that requires companies to protect the data and privacy of all European residents. The seven key principles are:
+
+Lawfulness, fairness, and transparency
+Purpose limitation
+Data minimization
+Accuracy
+Storage limitation
+Integrity and confidentiality (security)
+Accountability
+
+### GDPR Requirements
+GDPR itself contains several features each system must support:
+
+Right to erasure (also known as Right to be Forgotten): If API stores the personal data for a user and the user requests for their data to be erased, API must erase the data.
+Right to rectification: If API stores the personal data for a user and the user changes their data, API must either erase or update the data.
+Right to be informed: You must inform users if you collect and use their personal data.
+
+
 ## Localizability
 Internationalization Support: The system should be designed with internationalization in mind, following best practices and standards to ensure that it can be easily localized for different languages and regions. This includes using Unicode encoding, separating user interface text from code, and providing support for right-to-left languages, if applicable.
 ## Security
 The ConsentManager microservice should implement appropriate security measures to protect sensitive user data and ensure compliance with privacy regulations.
 For administrative functions public key encryption can be employed to secure the transmission and storage of consent data.
+
 # Technical implementation
 Programming Language: Python
 Database: PostgreSQL
 Web Framework: FastAPI
+## API reference
+https://editor.jsight.io/r/MBJeN6v/3
