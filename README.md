@@ -1,4 +1,9 @@
 # Intro
+## Why?
+- How to recognize, does a user signed all new versions of consents?
+- How to have evidence, that a user gives consents in case of claims (for users, for regulators, for courts)?
+
+## What is it?
 ConsentManager is a microservice that manages user consents. It provides an API for managing user consents, stores and retrieves consent data in a database, and enforces consent policies. ConsentManager is designed to comply with privacy regulations such as GDPR, CCPA, and others, which require companies to obtain explicit consent from users before collecting and processing their personal data. ConsentManager can be used for a variety of use cases, including onboarding, policy updates, compliance with privacy regulations, consent tracking, user data management, admin management, avoidance of regulatory fines, and increased brand value and customer loyalty.
 
 ## For users:
@@ -38,43 +43,22 @@ According to the twelve-factor methodology, the service is not providing any log
 ## Container diagram
 ![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/container.puml)
 
-## Component 
+## Component diagram
 ![Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/component.puml)
 
 ## ER diagram
 ![ER diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/er.puml)
 
-## Use cases
+## Use cases diagram
 ![Use cases diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/usecase.puml)
 
 ### Onboarding
 During the onboarding process, new users can sign a policy agreement and give their consent for data collection and processing. ConsentManager stores the consent data in the database and enforces the consent policies.
 
-```
-// Retrievs all consents with latest versions with specified category
-GET /consents/?category=onboarding
-```
-
-User with defined in the path {uuid} sign some consents, which defined in the request body 
-```
-POST /users/{uuid}/consents
-Request body - list of UUID of consents
-{
-  "uuids": [
-    "123e4567-e89b-12d3-a456-426655440000",
-    "223e4567-e89b-12d3-a456-426655440000",
-    "323e4567-e89b-12d3-a456-426655440000"
-  ]
-}
-```
+![Onboarding sequence diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/sequence-onboarding.puml)
 
 ### Registered users
-Retrieve signed consents for user by {uuid}
-```
-GET /users/{uuid}/consents
-```
-
-### Revoke consent
+![Registered users sequence diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/sequence-registered.puml)
 
 
 ### Administration
@@ -107,15 +91,13 @@ Request body:
 }
 ```
 
-Policy updates: When a company updates its policy, existing users can be notified and asked to review and update their consent preferences. ConsentManager updates the consent data in the database and enforces the updated consent policies.
+Policy updates: When a company updates their policy, existing users can be notified and asked to review and update their consent preferences. ConsentManager updates the consent data in the database and enforces the updated consent policies.
 Admin management: ConsentManager provides ability for monitoring received consents and data-subject requests. ConsentManager stores the consent data in the database and enforces the consent policies.
 
 
 Consent and data sharing management: Consent Manager provides APIs for building consent pages and integrating them with an authorization platform. This flow enables businesses to give their customers the option to share their data with third-party providers in open finance ecosystems
 
 
-## Sequence diagrams
-![Sequence diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/sequence.puml)
 
 ## Deployment diagram
 ![Deployment diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/deployment.puml)
@@ -161,4 +143,4 @@ Programming Language: Python
 Database: PostgreSQL
 Web Framework: FastAPI
 ## API reference
-https://editor.jsight.io/r/MBJeN6v/3
+https://editor.jsight.io/r/MBJeN6v/

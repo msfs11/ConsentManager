@@ -3,16 +3,12 @@
 entity "Consent" as consent {
   + uuid : uuid
   --
+  Active : boolean
+  Revokable : boolean
   TypeId : uuid
   FlowId : uuid
   ConsentStatus : uuid
   Content : text
-}
-
-entity "Status" as status {
-  + id : uuid
-  --
-  Title : varchar
 }
 
 entity "Type" as type {
@@ -56,7 +52,7 @@ signed::ConsentID ||..o{ consent::uuid : n:n
 consent ||..o{ history : Has
 consent ||..o{ type : Has
 consent::FlowId ||..o{ flow::uuid : Has
-consent ||..o{ status : Has
+
 history ||..o{ tracker : Tracks
 
 @enduml

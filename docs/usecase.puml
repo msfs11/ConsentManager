@@ -2,29 +2,34 @@
 left to right direction
 skinparam packageStyle rect
 
-actor "User" as new_user
+actor "New user" as new_user
 actor "Registered user" as registered_user
 
 package Company {
-    actor Compliance as c
     actor Admin as admin
+    actor Compliance as c
 }
 
 rectangle "ConsentManager" {
-  rectangle "Onboarding flow" {
+  rectangle "1. Onboarding flow" {
     usecase "Get terms" as terms
     usecase "Sign consent" as sign
   }
 
-  rectangle "Registered user actions" {
-    usecase "View signed consents" as signed
-    usecase "Revoke consents" as revoke
-    usecase "View change history" as history
+  rectangle "2. Registered user actions" {
+    usecase signed as "2.1 View signed consents"
+    usecase revoke as "2.2 Revoke consents"
+    note right of (revoke)
+      - Right to be Forgotten
+      - To unsubscribe from 
+      the marketing communications
+    end note
+    usecase history as "View consents change history"
   }
 
-  rectangle "Managing" {
-    usecase "Policy management" as manage
-    usecase "Consent Tracking" as tracking    
+  rectangle "3. Managing" {
+    usecase "3.1 Policy management" as manage
+    usecase "3.2 Consent Tracking" as tracking    
   }
   
 }

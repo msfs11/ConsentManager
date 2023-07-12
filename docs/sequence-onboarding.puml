@@ -1,0 +1,42 @@
+@startuml sequence
+
+actor User as user
+
+box "Company infrastructure" #LightBlue
+    participant "Company System" as api
+    participant "ConsentManager" as cm
+end box
+
+autonumber 1.1
+group Onboarding process
+    user -> api++: Get list of latest consents
+    note right
+        Retrievs all latest versions consents with specified category
+    end note
+    api -> cm++: GET /consents/?category=onboarding
+    cm -> api--: 200 OK
+        note right
+        {items:[
+            @consent,
+            ...
+        ]}
+        end note
+    api -> user--: List of consents
+    
+    == User gives consent ==    
+    user -> api++: Give Consent
+    api -> cm++: POST /users/{uuid}/consents
+    note right
+        {uuid} in the PATH is user id on the company system
+        Request body 
+        {"uuids": [
+            "123e4567-e89b-12d3-a456-426655440000",
+            "223e4567-e89b-12d3-a456-426655440000",
+            "323e4567-e89b-12d3-a456-426655440000"
+        ]}
+    end note
+    cm -> api--: 200 OK
+    api -> user--: Confirmed
+end
+
+@enduml

@@ -1,0 +1,94 @@
+@startuml sequence
+
+actor User as user
+
+box "Company infrastructure" #LightBlue
+    participant "Company System" as api
+    participant "ConsentManager" as cm
+end box
+
+autonumber 2.1
+group Registered user login flow
+        user -> api++: Are there any updated policies
+        api -> cm++: /consent/check/{user_uuid}/
+    alt New versions of consent available
+        cm -> api: List of consents
+        note right
+        {items:[
+            @consent,
+            ...
+        ]}
+        end note
+        api -> user: List of consents
+
+
+        == User gives consent ==    
+        user -> api++: Give Consent
+        api -> cm++: POST /users/{uuid}/consents
+        note right
+            User should sing newer versions of consents tp continue. \n
+            {uuid} in the PATH is user id on the company system \n
+            New given consents never overwritten
+
+            Request body 
+            {"uuids": [
+                "123e4567-e89b-12d3-a456-426655440000",
+                "223e4567-e89b-12d3-a456-426655440000",
+                "323e4567-e89b-12d3-a456-426655440000"
+            ]}
+        end note
+        cm -> api--: 200 OK
+        api -> user--: Confirmed
+
+    else No newer consents
+        cm -> api--: 404 Not found
+        api -> user--: Empty list, user can continue
+    end
+end group
+
+
+autonumber 2.2
+group Registered user revoke consent
+        user -> api++: 
+        api -> cm++: /consent/check/{user_uuid}/
+        cm -> api: List of consents
+        note right
+        {items:[
+            @consent,
+            ...
+        ]}
+        end note
+        api -> user: List of consents
+
+
+        == User revokes consent ==
+        user -> api++: Revoke Consent
+        api -> cm++: POST /users/{uuid}/consents
+        
+    alt Consent is revokable
+    hnote across: Some consents can be marked as revokable automatically, like marketing communications
+
+        note right
+            User should sing newer versions of consents tp continue. \n
+            {uuid} in the PATH is user id on the company system \n
+            New given consents never overwritten
+
+            Request body 
+            {"uuids": [
+                "123e4567-e89b-12d3-a456-426655440000",
+                "223e4567-e89b-12d3-a456-426655440000",
+                "323e4567-e89b-12d3-a456-426655440000"
+            ]}
+        end note
+        cm -> api--: 200 OK
+        api -> user--: Confirmed
+        
+    else Consent is not revokable
+        cm -> api--: 404 Not found
+        api -> user--: Empty list, user can continue
+    end
+
+end group
+
+
+@enduml
