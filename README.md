@@ -1,10 +1,10 @@
 # Intro
 ## Why?
-- How to recognize, does a user signed all new versions of consents?
-- How to have evidence, that a user gives consents in case of claims (for users, for regulators, for courts)?
+- How to recognize if the user has signed all new versions of the consents?
+- How to obtain evidence that the user gave consent in case of claims (from users, regulators and courts)?
 
 ## What is it?
-ConsentManager is a microservice that manages user consents. It provides an API for managing user consents, stores and retrieves consent data in a database, and enforces consent policies. ConsentManager is designed to comply with privacy regulations such as GDPR, CCPA, and others, which require companies to obtain explicit consent from users before collecting and processing their personal data. ConsentManager can be used for a variety of use cases, including onboarding, policy updates, compliance with privacy regulations, consent tracking, user data management, admin management, avoidance of regulatory fines, and increased brand value and customer loyalty.
+ConsentManager is a microservice that manages user consents. It provides an API for managing user consents, stores and retrieves consent data in a database, and enforces consent policies. 
 
 ## For users:
 - Control over their personal data: Consent management gives users control over their personal data by allowing them to choose what data they want to share with a company and how it can be used.
@@ -32,11 +32,11 @@ Increased brand value and customer loyalty: With consent management at the core 
 
 # Scope and Limitations
 Data storage:
-the service doesn't store any personal data, it stores only uuid of the users from the exteral systems, which signed specific consents.
+the service doesn't store any personal data, it stores only uuid of the users from exteral systems.
 
-Administration functions, including user roles and permissions, user authentication, and access control, are not in the scope of this microservice. The microservice primarily focuses on providing consent management functionality for users and secure API routes for administering consents using public key encryption.
+Administration functions and interface, including user roles and permissions, user authentication, and access control, are not in the scope of this microservice. The microservice primarily focuses on providing consent management functionality for users and secure API routes for administering consents with token-based identification.
 
-According to the twelve-factor methodology, the service is not providing any logging and metrics capabilities.
+According to the twelve-factor methodology, the service is not providing any logging and metrics capabilities and writes its unbuffered event stream to stdout.
 
 
 # Diagrams
@@ -87,11 +87,15 @@ PUT /consents/{uuid}
 PATCH /consents/{uuid}
 Request body:
 {
-  Active: true/false
+  active: true/false
 }
 ```
 
-Policy updates: When a company updates their policy, existing users can be notified and asked to review and update their consent preferences. ConsentManager updates the consent data in the database and enforces the updated consent policies.
+### Compliance operations
+**Get consents signed by user**
+
+
+Policy updates: When a company updates their policy, existing users can be notified and asked to review and . ConsentManager updates the consent data in the database and enforces the updated consent policies.
 Admin management: ConsentManager provides ability for monitoring received consents and data-subject requests. ConsentManager stores the consent data in the database and enforces the consent policies.
 
 

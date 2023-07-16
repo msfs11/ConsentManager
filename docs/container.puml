@@ -16,12 +16,14 @@ System_Ext(ext, "Website/desktop app/mobile apps", "Company systems for customer
 
 
 
-System_Boundary(message_processing_system, "Company system") {
+System_Boundary(company_env, "Company environment") {
     Container(api_gateway, "API gateway", "", "The main interface that the customer interacts with")
     Container(system, "Company system", "", "Handles all business logic")
-    Container(consent, "ConsentManager", "Manages consents", "Python, FastAPI")
+    System_Boundary(consent_system, "Consent management system") {
+        Container(consent, "ConsentManager", "Manages consents", "Python, FastAPI")
+        ContainerDb(consent_db, "Database", "PostgreSQL", "Holds consent items, versions and signed consents", $sprite="msql_server")
+    }
     Container(int_notification, "Notifications service", "", "Manages changes")
-    ContainerDb(consent_db, "Database", "PostgreSQL", "Holds consent items, versions and signed consents", $sprite="msql_server")
 
     Rel(api_gateway, consent, "Uses", "HTTP/REST API")
     Rel_U(api_gateway, system, "Uses")

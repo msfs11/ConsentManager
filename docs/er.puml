@@ -1,58 +1,47 @@
 @startuml ER diagram
+left to right direction
 
-entity "Consent" as consent {
-  + uuid : uuid
-  --
-  Active : boolean
-  Revokable : boolean
-  TypeId : uuid
-  FlowId : uuid
-  ConsentStatus : uuid
-  Content : text
-}
-
-entity "Type" as type {
+entity "policies" as policies {
   + id : uuid
   --
-  Title : varchar
+  state : boolean
+  revokable : boolean
+  type_id : uuid
+  content : text
 }
 
-entity "Flow" as flow {
+entity "type" as type {
   + id : uuid
   --
-  Title : varchar
+  title : varchar
 }
 
-entity "History" as history {
-  + HistoryID : uuid
+entity "consents" as consents {
+  + id : uuid
   --
-  ConsentID : int
-  ChangeDate : datetime
-  OldStatus : varchar
-  NewStatus : varchar
+  ext_user_id : uuid // user id from the external system
+  consent_id : uuid
+  timestamp : datetime
+  action_type : varchar [sign/revoke]
 }
 
-entity "ChangeTracker" as tracker {
-  + ChangeID : uuid
+entity "admin_log" as admin_log {
+  + id : uuid
   --
-  HistoryID : int
-  ChangeDate : datetime
-  ChangeType : varchar
+  ext_admin_id : uuid // id of the admin from the external system 
+  consent_id : uuid
+  change_date : datetime
+  action : text // Operation type according to CRUD
+  ip_address : inet 
 }
+note right of admin_log
+  since microservice is in the company environment, 
+  it's necessary to cast real IP of the admin
+end note
 
-entity "SignedConsents" as signed {
-  + uuid : uuid // user id from the external system
-  --
-  ConsentID : uuid
-  SignDate : datetime
-  SignType : varchar [sign/revoke]
-}
-
-signed::ConsentID ||..o{ consent::uuid : n:n
-consent ||..o{ history : Has
-consent ||..o{ type : Has
-consent::FlowId ||..o{ flow::uuid : Has
-
-history ||..o{ tracker : Tracks
+consent::id ||..o{ signed::consent_id : 1:n
+type::id ||..o{ consent::type_id : 1:n
+consent::id ||..o{ history::consent_id : 1:n
+consent::id ||..o{ admin_log::consent_id : 1:n
 
 @enduml

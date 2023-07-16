@@ -10,7 +10,7 @@ end box
 autonumber 2.1
 group Registered user login flow
         user -> api++: Are there any updated policies
-        api -> cm++: /consent/check/{user_uuid}/
+        api -> cm++: /consent/{user_uuid}/check
     alt New versions of consent available
         cm -> api: List of consents
         note right
