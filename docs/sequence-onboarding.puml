@@ -1,5 +1,6 @@
 @startuml sequence
 
+title Sequence diagram
 actor User as user
 
 box "Company infrastructure" #LightBlue

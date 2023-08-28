@@ -12,6 +12,9 @@ class BaseDictionary(BaseModel):
     lang: str | None
     region_availability: str | None
 
+    class Config:
+        """BaseDictionary"""
+        from_attributes = True
 
 class PrivacyPolicy(BaseDictionary):
     """BaseDictionary"""
@@ -19,7 +22,7 @@ class PrivacyPolicy(BaseDictionary):
 
     class Config:
         """BaseDictionary"""
-        orm_mode = True
+        from_attributes = True
 
 
 class TermsCondition(BaseDictionary):
@@ -28,7 +31,7 @@ class TermsCondition(BaseDictionary):
 
     class Config:
         """BaseDictionary"""
-        orm_mode = True
+        from_attributes = True
 
 
 class ConsentType(StrEnum):
@@ -38,7 +41,7 @@ class ConsentType(StrEnum):
 
 
 class TermsPolicies(BaseModel):
-    """Consent schema."""
+    """TermsPolicies schema."""
     privacy_policies: list[PrivacyPolicy] | None
     terms_conditions: list[TermsCondition] | None
 
@@ -55,8 +58,8 @@ class Consent(BaseModel):
     terms_conditions_and_privacy_policy_accepted: bool | None
 
     class Config:
-        """Consent schema."""
-        orm_mode = True
+        """Consent schema config"""
+        from_attributes = True
 
 
 class UserStatusResponse(BaseModel):

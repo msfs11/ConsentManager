@@ -4,7 +4,20 @@
 - How to obtain evidence that the user gave consent in case of claims (from users, regulators and courts)?
 
 ## What is it?
-ConsentManager is a microservice that manages user consents. It provides an API for managing user consents, stores and retrieves consent data in a database, and enforces consent policies. 
+ConsentManager is a microservice that manages user consents, it introduces the centralized consent management system. It provides an API for managing user consents, stores and retrieves consent data in a database, and enforces consent policies. 
+It introduces for the companies:
+- Automation of data subjects’ rights fulfillment
+- Automation of data retention and data destruction policies
+- Introduction of a self-service portal for consent and preference management
+
+But it's still on the compnaies to manage the following chalanges:
+- Data categorization,
+- Data mapping,
+- Data protection,
+- Data minimization,
+- Pseudonymization and anonymization of data in IT systems,
+- Introduction of the centralized consent management system,
+
 
 ## For users:
 - Control over their personal data: Consent management gives users control over their personal data by allowing them to choose what data they want to share with a company and how it can be used.
@@ -15,6 +28,8 @@ ConsentManager is a microservice that manages user consents. It provides an API 
 - Avoidance of regulatory fines: Consent management helps companies avoid regulatory fines by ensuring that they collect and process data only with the appropriate consent.
 Increased brand value and customer loyalty: With consent management at the core of the marketing strategy, companies can increase brand value and boost customer loyalty.
 - Trust and transparency: Consent management helps companies build trust and transparency with their customers by being transparent about how their data will be used and who will have access to it.
+
+
 
 # Glossary
 - Consent: The agreement or permission expressed through affirmative, voluntary words or actions that are mutually understandable to all parties involved, to engage in a specific act at a specific time.
@@ -40,17 +55,61 @@ According to the twelve-factor methodology, the service is not providing any log
 
 
 # Diagrams
+
 ## Container diagram
+
 ![Container diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/container.puml)
 
 ## Component diagram
-![Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/component.puml)
+FastAPI framework was chosen as a most relible for cloud-native apps.
+To follow DRY Design Principles services was implemented.
+
+
+```plantuml
+@startuml component
+!include <C4/C4_Component>
+
+
+title Component diagram
+
+Person_Ext(user, "Company users", "Customers")
+Person(admin, "Admin", "Company administrator", $sprite="person2")
+
+System_Boundary(company, "Company System") {
+    System(system, "Company system", "Company core system, provides also CMS functions")
+
+    System_Boundary(consent_manager, "ConsentManager", "A microservice for managing user consents") {
+        Component(api, "API", "FastAPI", "API for managing user consents")
+        ' Component(logic, "Logic", "Logic for managing user consents")
+        Component(storage, "ORM", "SQLAlchemy", "Async ORM")
+        Component(session, "Session", "Async session")
+        Component(service, "Services", "component", "To follow DRY design principles, the services component is used, and it's allow to achive: \n- Code Reusability - Services components encapsulate specific functionality or business logic\n-Testability - services can be easily tested in isolation (even with mocks), as they represent independent units of functionality.\n- Modularity and Maintainability with clean and modular code")
+    }
+    SystemDb(db, "ConsentManager DB", "Holds consent items, versions and signed consents")
+    
+    Rel(system, api, "Uses")
+    Rel_D(storage, db, "Reads/Writes", "TCP/SQL")
+    Rel(admin, system, "Uses")
+    Rel(user, system, "Uses")
+}
+@enduml
+```
+
+
+## System architecture
+```plantuml
+
+
+```
 
 ## ER diagram
+
 ![ER diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/er.puml)
 
 ## Use cases diagram
+
 ![Use cases diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/usecase.puml)
+
 
 ### Onboarding
 During the onboarding process, new users can sign a policy agreement and give their consent for data collection and processing. ConsentManager stores the consent data in the database and enforces the consent policies.
