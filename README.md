@@ -64,43 +64,13 @@ According to the twelve-factor methodology, the service is not providing any log
 FastAPI framework was chosen as a most relible for cloud-native apps.
 To follow DRY Design Principles services was implemented.
 
-
-```plantuml
-@startuml component
-!include <C4/C4_Component>
-
-
-title Component diagram
-
-Person_Ext(user, "Company users", "Customers")
-Person(admin, "Admin", "Company administrator", $sprite="person2")
-
-System_Boundary(company, "Company System") {
-    System(system, "Company system", "Company core system, provides also CMS functions")
-
-    System_Boundary(consent_manager, "ConsentManager", "A microservice for managing user consents") {
-        Component(api, "API", "FastAPI", "API for managing user consents")
-        ' Component(logic, "Logic", "Logic for managing user consents")
-        Component(storage, "ORM", "SQLAlchemy", "Async ORM")
-        Component(session, "Session", "Async session")
-        Component(service, "Services", "component", "To follow DRY design principles, the services component is used, and it's allow to achive: \n- Code Reusability - Services components encapsulate specific functionality or business logic\n-Testability - services can be easily tested in isolation (even with mocks), as they represent independent units of functionality.\n- Modularity and Maintainability with clean and modular code")
-    }
-    SystemDb(db, "ConsentManager DB", "Holds consent items, versions and signed consents")
-    
-    Rel(system, api, "Uses")
-    Rel_D(storage, db, "Reads/Writes", "TCP/SQL")
-    Rel(admin, system, "Uses")
-    Rel(user, system, "Uses")
-}
-@enduml
-```
+![Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/component.puml)
 
 
 ## System architecture
-```plantuml
 
+![Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/architecture.puml)
 
-```
 
 ## ER diagram
 
@@ -176,6 +146,7 @@ Regulatory Compliance Reporting: ConsentManager should generate reports and prov
 Integration Capabilities: ConsentManager should be able to integrate with other systems and applications within the organization's technology landscape, such as customer relationship management (CRM) systems or data analytics platforms.
 
 # Non-functional requirements
+
 ## Legal cleaness
 GDPR is a European Union law enacted on 25 May 2018 that requires companies to protect the data and privacy of all European residents. The seven key principles are:
 
@@ -197,6 +168,7 @@ Right to be informed: You must inform users if you collect and use their persona
 
 ## Localizability
 Internationalization Support: The system should be designed with internationalization in mind, following best practices and standards to ensure that it can be easily localized for different languages and regions. This includes using Unicode encoding, separating user interface text from code, and providing support for right-to-left languages, if applicable.
+
 ## Security
 The ConsentManager microservice should implement appropriate security measures to protect sensitive user data and ensure compliance with privacy regulations.
 For administrative functions public key encryption can be employed to secure the transmission and storage of consent data.
@@ -205,5 +177,6 @@ For administrative functions public key encryption can be employed to secure the
 Programming Language: Python
 Database: PostgreSQL
 Web Framework: FastAPI
+
 ## API reference
 https://editor.jsight.io/r/MBJeN6v/
