@@ -1,0 +1,27 @@
+@startuml component
+!include <C4/C4_Component>
+
+
+title Component diagram
+
+Person_Ext(user, "Company users", "Customers")
+Person(admin, "Admin", "Company administrator", $sprite="person2")
+
+System_Boundary(company, "Company System") {
+    System(system, "Company system", "Company core system, provides also CMS functions")
+
+    System_Boundary(consent_manager, "ConsentManager", "A microservice for managing user consents") {
+        Component(api, "API", "FastAPI", "API for managing user consents")
+        ' Component(logic, "Logic", "Logic for managing user consents")
+        Component(storage, "ORM", "SQLAlchemy", "Async ORM")
+        Component(session, "Session", "Async session")
+        Component(service, "Services", "component", "To follow DRY design principles, the services component is used, and it's allow to achive: \n- Code Reusability - Services components encapsulate specific functionality or business logic\n-Testability - services can be easily tested in isolation (even with mocks), as they represent independent units of functionality.\n- Modularity and Maintainability with clean and modular code")
+    }
+    SystemDb(db, "ConsentManager DB", "Holds consent items, versions and signed consents")
+    
+    Rel(system, api, "Uses")
+    Rel_D(storage, db, "Reads/Writes", "TCP/SQL")
+    Rel(admin, system, "Uses")
+    Rel(user, system, "Uses")
+}
+@enduml

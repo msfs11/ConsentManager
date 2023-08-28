@@ -1,0 +1,29 @@
+@startuml architecture_sequence
+
+title System architecture sequence diagram
+actor User as user
+
+box "System boundary" #LightBlue
+    participant "Routers" as rt
+    participant "Services" as svc
+    participant "Schemas" as scm
+    participant "Models" as md
+end box
+
+autonumber 1.1
+group Onboarding process
+    user -> rt++: request
+    note right
+        Any inbound API request processed by the Fast API router
+    end note
+    rt -> svc++: 
+    svc -> scm++:
+    scm -> md++:
+
+    md -> scm--:
+    scm -> svc--:
+    svc -> rt--: 
+    rt -> user--: response
+end
+
+@enduml

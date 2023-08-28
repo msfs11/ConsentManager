@@ -1,0 +1,15 @@
+@startuml deployment
+!include <C4/C4_Deployment>
+
+Node(db, "DB", "PostgreSQL")
+Node(gw, "API Gateway", "API Gateway")
+
+AddProperty("PropC1", "ValueC1")
+AddProperty("PropC2", "ValueC2")
+Container(cm, "ConsentManager", "Python", "Consent manager service") {
+
+}
+Container(containerAlias, "Label", "Technology", "Optional Description (without property header)")
+
+
+@enduml
