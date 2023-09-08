@@ -3,26 +3,49 @@
 title System architecture sequence diagram
 actor User as user
 
-box "System boundary" #LightBlue
+box "System boundary" #LightGray
     participant "Routers" as rt
     participant "Services" as svc
-    participant "Schemas" as scm
+    participant "Repository" as repo
     participant "Models" as md
+    participant "Schemas" as scm
+    participant "Logger" as log
 end box
 
 autonumber 1.1
-group Onboarding process
-    user -> rt++: request
-    note right
-        Any inbound API request processed by the Fast API router
-    end note
-    rt -> svc++: 
-    svc -> scm++:
-    scm -> md++:
+group System stack call sequence
 
-    md -> scm--:
-    scm -> svc--:
-    svc -> rt--: 
+    note across
+        All API requests processed by the FastAPI router
+    end note
+
+    user -> rt++: request
+    rt --> log: request received
+    rt -> rt: include dependencies, schemas, services
+    rt -> rt: calls services collection for specified route
+    alt try
+        rt -> svc++: calls class Service(Repo)
+        svc -> svc: data pre-processing logic
+        
+        alt #LightBlue Request is valid
+            svc --> log: request validated
+        else #Pink Request invalid
+            svc --> log: request invalid
+            svc -> svc: Raise error
+        end
+
+        svc -> repo++: repo(schema)
+        repo -> md++:
+        md -> scm++: service includes 
+
+        ' md -> scm--:
+        ' scm -> svc--:
+        ' svc -> rt--: 
+        ' svc -> svc: route spcefic additional logic
+    else exception
+        rt --> log: request failed
+        rt -> rt: error message
+    end alt
     rt -> user--: response
 end
 

@@ -1,0 +1,88 @@
+@startuml
+actor "Person/WebHook" as person
+
+box "CFPS assests" #LightCyan
+participant Frontend
+participant Backend
+participant DB
+participant Subsystem
+end box
+
+participant "Any external system" as external
+
+box "Monitoring system" #Lavender
+participant EventStream
+participant LoggingSystem
+participant AlertingSystem
+end box
+actor Admin
+
+person -> Frontend++: Some request
+note right
+Any external call (user action or webhook call) 
+produces event, which should be tracked the way, independly on the source
+end note
+Frontend -> Backend++: Sending request 
+
+Backend -> Backend: assign trace_id
+note right
+Once trace_id is assigned it should 
+be transffered across all internal systems
+end note
+Backend -[#Green]-> EventStream: Publish request received Event
+
+Backend -> Backend: validate request
+
+ alt #LightBlue Request is valid
+  Backend -[#Green]-> EventStream: Publish request was validated successfully
+ else #Pink Request invalid
+  Backend -[#Green]-> EventStream: Publish request was invalid
+ end
+
+
+opt DB request
+Backend -[#Green]-> EventStream: Publish DB request Event
+Backend -> DB++: DB query
+Backend <- DB--: result
+Backend -[#Green]-> EventStream: Publish DB response received Event
+end
+
+opt internal call 
+ Backend -[#Green]-> EventStream: Publish Event that request to the Subsystem has been started
+ Backend -> Subsystem++
+ Subsystem -[#Green]-> EventStream: Publish request received Event
+ Subsystem -> Subsystem: Validate request
+ alt #LightBlue Request is valid
+  Subsystem -[#Green]-> EventStream: Publish request validated successfully
+ else #Pink Request invalid
+  Subsystem -[#Green]-> EventStream: Publish request is invalid
+ end
+ Subsystem -[#Green]-> EventStream: Publish response sent Event
+ Backend <- Subsystem--: Response
+ Backend -[#Green]-> EventStream: Publish Subsystem received received Event
+end
+
+opt External system call 
+ Backend -[#Green]-> EventStream: Publish Event that request to the Subsystem has been started
+ Backend -> external++: External system request
+ Backend <- external--:
+ Backend -[#Green]-> EventStream: Publish response received Event
+ alt #LightBlue Request is valid
+  Backend -[#Green]-> EventStream: Publish request was validated successfully
+ else #Pink Request invalid
+  Backend -[#Green]-> EventStream: Publish request was invalid
+ end
+end
+
+
+Backend -[#Green]-> EventStream: Publish response is sent Event
+Frontend <- Backend--: Sending response
+Frontend -> person:
+
+EventStream -> LoggingSystem: Log Event
+LoggingSystem <- AlertingSystem: Parse logs
+opt
+ AlertingSystem -> Admin: Send alert
+end
+
+@enduml

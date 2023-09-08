@@ -1,18 +1,23 @@
 """
-A class for managing user consents.
+A class for managing policies
 
 Attributes:
-user_id (str): The unique identifier for the user.
-consent (dict): A dictionary containing the user's consent preferences.
+id (str): The unique identifier
 
 Methods:
-get_consent(): Returns the user's current consent preferences.
-set_consent(consent: dict): Sets the user's consent preferences.
-delete_consent(): Deletes the user's consent preferences.
+get_one(id: int): Returns one policy
+get(): Get list
+create(): Create entity
+update(id: int): Update entity
+delete(id: int): Delete entity
 """
 from fastapi import APIRouter, status
 
-from schemas.consent import ConsentType
+
+from dependencies import policy_service
+from schemas.policy import PolicySchemaAdd
+from services.policy import PolicyService
+# from schemas.consent import ConsentType
 
 
 router = APIRouter()
@@ -22,7 +27,7 @@ router = APIRouter()
     path="/{name}",
     status_code=status.HTTP_200_OK,
 )
-def get_consent_by_id(
+def get(
     name: ConsentType,
 ):
     """Get dictionary by name.
