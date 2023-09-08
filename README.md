@@ -68,6 +68,9 @@ To follow DRY Design Principles services was implemented.
 
 
 ## System architecture
+The system uses the following:
+- repository pattern to work with collections
+- follows SOLID dependency inversion
 
 ![Component diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/msfs11/ConsentManager/main/docs/architecture.puml)
 
